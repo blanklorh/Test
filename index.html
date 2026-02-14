@@ -24,7 +24,7 @@ h1, h2 {
     text-shadow: 0 4px 12px rgba(0,0,0,0.8);
 }
 
-/* ROUND GIF (shifted UP 30px total) */
+/* ROUND GIF */
 .gif-container {
     position: absolute;
     top: 23%;
@@ -39,7 +39,7 @@ h1, h2 {
     background: white;
 }
 
-/* MAIN (shifted UP 15px) */
+/* MAIN */
 .main-content {
     position: absolute;
     top: 57%;
@@ -62,6 +62,13 @@ h1, h2 {
     gap: 30px;
 }
 
+/* YES WRAPPER (prevents layout shift) */
+#yesWrapper {
+    position: relative;
+    display: inline-block;
+    transform-origin: center;
+}
+
 /* iOS STYLE BUTTONS */
 .ios-btn {
     min-width: 190px;
@@ -78,18 +85,17 @@ h1, h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    transform-origin: center;
     will-change: transform;
 }
 
-/* YES – pastel pink */
+/* YES */
 #yesBtn {
     background: rgba(255,105,180,0.9);
     color: white;
     box-shadow: 0 6px 18px rgba(255,105,180,0.35);
 }
 
-/* NO – pastel turquoise */
+/* NO */
 #noBtn {
     background: rgba(64,224,208,0.9);
     color: white;
@@ -118,7 +124,7 @@ h1, h2 {
 }
 .notification.show { top: 20px; }
 
-/* FACE ID FULL BLACK */
+/* FACE ID */
 .faceid-overlay {
     position: fixed;
     inset: 0;
@@ -173,9 +179,9 @@ h1, h2 {
 
 /* JUMP */
 @keyframes jump {
-    0%{transform:scale(var(--scale)) translateY(0);}
-    50%{transform:scale(var(--scale)) translateY(-45px);}
-    100%{transform:scale(var(--scale)) translateY(0);}
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-45px);}
+    100%{transform:translateY(0);}
 }
 .jump { animation: jump 0.6s ease; }
 
@@ -194,7 +200,7 @@ h1, h2 {
     }
 }
 
-/* POPUP – glow removed, thinner border */
+/* POPUP */
 .popup {
     position: fixed;
     top: 50%;
@@ -211,26 +217,6 @@ h1, h2 {
     border-radius: 18px;
     border: 2px solid rgba(255,255,255,0.9);
     box-shadow: 0 10px 25px rgba(0,0,0,0.35);
-}
-
-/* MULTI CLOUD PUFF */
-.cloud-container {
-    position: fixed;
-    pointer-events: none;
-    z-index: 1500;
-    animation: puffFade 0.7s ease-out forwards;
-}
-
-.cloud-bubble {
-    position: absolute;
-    background: radial-gradient(circle at 30% 30%, #ffffff 60%, #e6e6e6 100%);
-    border-radius: 50%;
-}
-
-@keyframes puffFade {
-    0% { transform: scale(0.4); opacity: 1; }
-    70% { transform: scale(1.2); opacity: 0.9; }
-    100% { transform: scale(1.5); opacity: 0; }
 }
 </style>
 </head>
@@ -265,8 +251,13 @@ data-width="100%">
 <div class="main-content" id="mainContent">
 <h1>HAI BB, WILL YOU BE MY VALENTINE?</h1>
 <div class="buttons">
+
+<div id="yesWrapper">
 <button class="ios-btn" id="yesBtn">YES 💖</button>
+</div>
+
 <button class="ios-btn" id="noBtn">NO 😜</button>
+
 </div>
 </div>
 
@@ -279,6 +270,7 @@ data-width="100%">
 
 <script>
 const yesBtn = document.getElementById("yesBtn");
+const yesWrapper = document.getElementById("yesWrapper");
 const noBtn = document.getElementById("noBtn");
 const notification = document.getElementById("notification");
 const faceid = document.getElementById("faceid");
@@ -287,12 +279,7 @@ const mainContent = document.getElementById("mainContent");
 const popup = document.getElementById("popup");
 const coinSound = document.getElementById("coinSound");
 
-let noClicks=0;
-let noScale=1;
-let yesScale=1;
-
-const baseYesWidth = 190;
-const baseYesHeight = 60;
+let noClicks=0, noScale=1, yesScale=1;
 
 noBtn.addEventListener("click",()=>{
     noClicks++;
@@ -300,51 +287,9 @@ noBtn.addEventListener("click",()=>{
     if(noScale<0.3) noScale=0.3;
     yesScale*=1.15;
 
-    // NO still scales visually (same as before)
     noBtn.style.transform=`scale(${noScale})`;
-
-    // YES now resizes using real dimensions (fix hitbox)
-    yesBtn.style.width = (baseYesWidth * yesScale) + "px";
-    yesBtn.style.height = (baseYesHeight * yesScale) + "px";
-    yesBtn.style.zIndex=10;
-
-    if(noClicks===5){
-        const rect = noBtn.getBoundingClientRect();
-        const cloud = document.createElement("div");
-        cloud.classList.add("cloud-container");
-        cloud.style.left = rect.left + rect.width/2 - 70 + "px";
-        cloud.style.top = rect.top + rect.height/2 - 70 + "px";
-        cloud.style.width = "140px";
-        cloud.style.height = "140px";
-
-        const sizes=[80,60,70,50,65];
-        const positions=[
-            {x:30,y:40},{x:70,y:20},
-            {x:90,y:60},{x:20,y:80},{x:60,y:90}
-        ];
-
-        sizes.forEach((size,i)=>{
-            const bubble=document.createElement("div");
-            bubble.classList.add("cloud-bubble");
-            bubble.style.width=size+"px";
-            bubble.style.height=size+"px";
-            bubble.style.left=positions[i].x+"px";
-            bubble.style.top=positions[i].y+"px";
-            cloud.appendChild(bubble);
-        });
-
-        document.body.appendChild(cloud);
-
-        noBtn.style.display="none";
-        document.body.classList.add("shake");
-        yesBtn.classList.add("jump");
-
-        setTimeout(()=>{
-            document.body.classList.remove("shake");
-            yesBtn.classList.remove("jump");
-            cloud.remove();
-        },700);
-    }
+    yesWrapper.style.transform=`scale(${yesScale})`;
+    yesWrapper.style.zIndex=10;
 });
 
 yesBtn.addEventListener("click",()=>{
@@ -384,4 +329,3 @@ function confettiBurst(){
 
 </body>
 </html>
-
