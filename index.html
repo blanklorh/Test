@@ -24,7 +24,7 @@ h1, h2 {
     text-shadow: 0 4px 12px rgba(0,0,0,0.8);
 }
 
-/* ROUND GIF */
+/* ROUND GIF (shifted UP 30px total) */
 .gif-container {
     position: absolute;
     top: 23%;
@@ -39,7 +39,7 @@ h1, h2 {
     background: white;
 }
 
-/* MAIN */
+/* MAIN (shifted UP 15px) */
 .main-content {
     position: absolute;
     top: 57%;
@@ -62,59 +62,43 @@ h1, h2 {
     gap: 30px;
 }
 
-/* ===== iOS 17 BUTTON BASE ===== */
+/* iOS STYLE BUTTONS */
 .ios-btn {
     min-width: 190px;
     min-height: 60px;
     padding: 14px 28px;
-    font-size: 17px;
+    font-size: 20px;
     font-weight: 600;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-    border-radius: 14px;
+    border-radius: 22px;
     border: none;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
     justify-content: center;
     transform-origin: center;
-    -webkit-tap-highlight-color: transparent;
-    position: relative;
+    will-change: transform;
 }
 
-/* Subtle highlight layer */
-.ios-btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 14px;
-    background: linear-gradient(
-        to bottom,
-        rgba(255,255,255,0.35),
-        rgba(255,255,255,0.08) 40%,
-        rgba(0,0,0,0.05) 100%
-    );
-    pointer-events: none;
-}
-
-/* YES – iOS 17 Primary */
+/* YES – pastel pink */
 #yesBtn {
-    background: #007AFF;
-    color: #ffffff;
-    box-shadow: 0 4px 14px rgba(0,122,255,0.35);
+    background: rgba(255,105,180,0.9);
+    color: white;
+    box-shadow: 0 6px 18px rgba(255,105,180,0.35);
 }
 
-/* NO – iOS 17 Secondary */
+/* NO – pastel turquoise */
 #noBtn {
-    background: #F2F2F7;
-    color: #007AFF;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    background: rgba(64,224,208,0.9);
+    color: white;
+    box-shadow: 0 6px 18px rgba(64,224,208,0.35);
 }
 
-/* Press */
 .ios-btn:active {
-    transform: scale(0.94);
-    opacity: 0.96;
+    transform: scale(0.96);
+    opacity: 0.85;
 }
 
 /* Notification */
@@ -210,7 +194,7 @@ h1, h2 {
     }
 }
 
-/* POPUP */
+/* POPUP – glow removed, thinner border */
 .popup {
     position: fixed;
     top: 50%;
@@ -229,7 +213,7 @@ h1, h2 {
     box-shadow: 0 10px 25px rgba(0,0,0,0.35);
 }
 
-/* CLOUD PUFF */
+/* MULTI CLOUD PUFF */
 .cloud-container {
     position: fixed;
     pointer-events: none;
@@ -250,3 +234,144 @@ h1, h2 {
 }
 </style>
 </head>
+
+<body>
+
+<audio id="bgMusic" src="shine-your-light.mp3" autoplay loop></audio>
+<audio id="coinSound" src="coin.mp3"></audio>
+
+<div class="notification" id="notification">
+<b>Messages</b><br>
+From: Goby 🤍<br>
+"That's my bby peahcy! You do love me!! 😘"
+</div>
+
+<div class="faceid-overlay" id="faceid">
+<div class="faceid-circle">
+<div class="scan-line"></div>
+</div>
+<div class="faceid-text" id="faceText">Face ID Scanning...</div>
+</div>
+
+<div class="gif-container">
+<div class="tenor-gif-embed"
+data-postid="1312436877492002001"
+data-share-method="host"
+data-aspect-ratio="1"
+data-width="100%">
+</div>
+</div>
+
+<div class="main-content" id="mainContent">
+<h1>HAI BB, WILL YOU BE MY VALENTINE?</h1>
+<div class="buttons">
+<button class="ios-btn" id="yesBtn">YES 💖</button>
+<button class="ios-btn" id="noBtn">NO 😜</button>
+</div>
+</div>
+
+<div class="popup" id="popup">
+<img src="image2.jpg">
+<h2>I knew you would hehehehe! I LOVE U BEB! 💖</h2>
+</div>
+
+<script async src="https://tenor.com/embed.js"></script>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const notification = document.getElementById("notification");
+const faceid = document.getElementById("faceid");
+const faceText = document.getElementById("faceText");
+const mainContent = document.getElementById("mainContent");
+const popup = document.getElementById("popup");
+const coinSound = document.getElementById("coinSound");
+
+let noClicks=0, noScale=1, yesScale=1;
+
+noBtn.addEventListener("click",()=>{
+    noClicks++;
+    noScale*=0.85;
+    if(noScale<0.3) noScale=0.3;
+    yesScale*=1.15;
+
+    noBtn.style.transform=`scale(${noScale})`;
+    yesBtn.style.transform=`scale(${yesScale})`;
+    yesBtn.style.zIndex=10;
+
+    if(noClicks===5){
+        const rect = noBtn.getBoundingClientRect();
+        const cloud = document.createElement("div");
+        cloud.classList.add("cloud-container");
+        cloud.style.left = rect.left + rect.width/2 - 70 + "px";
+        cloud.style.top = rect.top + rect.height/2 - 70 + "px";
+        cloud.style.width = "140px";
+        cloud.style.height = "140px";
+
+        const sizes=[80,60,70,50,65];
+        const positions=[
+            {x:30,y:40},{x:70,y:20},
+            {x:90,y:60},{x:20,y:80},{x:60,y:90}
+        ];
+
+        sizes.forEach((size,i)=>{
+            const bubble=document.createElement("div");
+            bubble.classList.add("cloud-bubble");
+            bubble.style.width=size+"px";
+            bubble.style.height=size+"px";
+            bubble.style.left=positions[i].x+"px";
+            bubble.style.top=positions[i].y+"px";
+            cloud.appendChild(bubble);
+        });
+
+        document.body.appendChild(cloud);
+
+        noBtn.style.display="none";
+        document.body.classList.add("shake");
+        yesBtn.classList.add("jump");
+
+        setTimeout(()=>{
+            document.body.classList.remove("shake");
+            yesBtn.classList.remove("jump");
+            cloud.remove();
+        },700);
+    }
+});
+
+yesBtn.addEventListener("click",()=>{
+    coinSound.play();
+    mainContent.classList.add("blur");
+    notification.classList.add("show");
+
+    setTimeout(()=>{
+        notification.classList.remove("show");
+        faceid.style.opacity="1";
+        faceid.style.pointerEvents="auto";
+    },2000);
+
+    setTimeout(()=>{ faceText.innerText="Face ID Recognized ✓"; },4000);
+
+    setTimeout(()=>{
+        faceid.style.opacity="0";
+        faceid.style.pointerEvents="none";
+        popup.style.opacity="1";
+        popup.style.transform="translate(-50%,-50%) scale(1)";
+        confettiBurst();
+    },5200);
+});
+
+function confettiBurst(){
+    for(let i=0;i<100;i++){
+        const c=document.createElement("div");
+        c.classList.add("confetti");
+        c.style.left=Math.random()*100+"vw";
+        c.style.background=["#ff6fcf","#40e0d0","#fff","#ffd1f7"][Math.floor(Math.random()*4)];
+        c.style.animationDuration=(Math.random()*2+2)+"s";
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),3000);
+    }
+}
+</script>
+
+</body>
+</html>
