@@ -18,9 +18,9 @@ html, body {
     background-size: cover;
 }
 
-/* TEXT SHADOW FOR ALL TEXT */
+/* TEXT SHADOW */
 h1, h2 {
-    text-shadow: 0 4px 12px rgba(0,0,0,0.7);
+    text-shadow: 0 4px 12px rgba(0,0,0,0.75);
 }
 
 /* GIF */
@@ -29,7 +29,13 @@ h1, h2 {
     top: 28%;
     left: 50%;
     transform: translateX(-50%);
-    width: 140px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #ffb6e6;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    background: white;
 }
 
 /* MAIN */
@@ -47,46 +53,46 @@ h1 {
     color: white;
 }
 
-/* ARCADE BUTTONS */
+/* BUTTON CONTAINER */
 .buttons {
     margin-top: 35px;
-    position: relative;
-    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
 }
 
+/* ARCADE BUTTON */
 .arcade-btn {
-    position: absolute;
-    padding: 18px 30px;
+    min-width: 140px;        /* bigger tap area */
+    min-height: 70px;
+    padding: 20px 35px;
     font-size: 22px;
-    border-radius: 18px;
-    border: none;
+    border-radius: 20px;
     cursor: pointer;
     font-family: 'Cheri', cursive;
-    transition: all 0.3s ease;
+    border: 3px solid;
     box-shadow: 0 8px 0 rgba(0,0,0,0.3);
     text-shadow: 0 3px 6px rgba(0,0,0,0.6);
+    transition: transform 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* YES */
 #yesBtn {
-    left: 15%;
     background: linear-gradient(145deg, #ff9edb, #ff6fcf);
+    border-color: #ffc4ec;
     color: white;
-    animation: glow 2s infinite;
 }
 
 /* NO */
 #noBtn {
-    right: 15%;
     background: linear-gradient(145deg, #40e0d0, #1ec7b6);
+    border-color: #b2fff7;
     color: white;
-}
-
-/* Glow animation */
-@keyframes glow {
-    0% { box-shadow: 0 0 10px #fff; }
-    50% { box-shadow: 0 0 35px #ff9edb; }
-    100% { box-shadow: 0 0 10px #fff; }
 }
 
 /* Blur */
@@ -130,16 +136,17 @@ h1 {
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     transition: top 0.5s ease;
-    z-index: 10;
 }
 
 .notification.show { top: 20px; }
 
 /* Face ID */
 .faceid-overlay {
-    position: absolute;
+    position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -147,8 +154,8 @@ h1 {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s ease;
+    z-index: 999;
 }
-
 .faceid-circle {
     width: 130px;
     height: 130px;
@@ -186,8 +193,8 @@ h1 {
 
 <div class="notification" id="notification">
 <b>Messages</b><br>
-From: Goby 💖<br>
-"Solid la good choice hehe 😘"
+From: Goby 🤍<br>
+"Solid choice lah bebbb!! 😘"
 </div>
 
 <div class="faceid-overlay" id="faceid">
@@ -243,20 +250,14 @@ let yesScale = 1;
 /* NO behavior */
 noBtn.addEventListener("click", () => {
 
-    // Shrink NO
+    // shrink NO (uniform scale, no distortion)
     noScale *= 0.85;
     if (noScale < 0.3) noScale = 0.3;
     noBtn.style.transform = `scale(${noScale})`;
 
-    // Grow YES
+    // grow YES every time
     yesScale *= 1.1;
     yesBtn.style.transform = `scale(${yesScale})`;
-
-    // Move NO randomly
-    const randomX = Math.random() * 200 - 100;
-    const randomY = Math.random() * 80 - 40;
-    noBtn.style.left = `calc(50% + ${randomX}px)`;
-    noBtn.style.top = `${randomY + 40}px`;
 });
 
 /* YES behavior */
