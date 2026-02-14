@@ -24,10 +24,10 @@ h1, h2 {
     text-shadow: 0 4px 12px rgba(0,0,0,0.8);
 }
 
-/* ROUND GIF */
+/* ROUND GIF (shifted UP 30px) */
 .gif-container {
     position: absolute;
-    top: 28%;
+    top: 23%;   /* was 28% */
     left: 50%;
     transform: translateX(-50%);
     width: 150px;
@@ -39,10 +39,10 @@ h1, h2 {
     background: white;
 }
 
-/* MAIN */
+/* MAIN (shifted UP 15px visually) */
 .main-content {
     position: absolute;
-    top: 60%;
+    top: 57%;  /* was 60% */
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
@@ -77,6 +77,8 @@ h1, h2 {
     position: relative;
     font-weight: bold;
     letter-spacing: 1px;
+    transform-origin: center center;
+    will-change: transform;
 }
 
 .maple-btn::after {
@@ -199,7 +201,7 @@ h1, h2 {
     }
 }
 
-/* POPUP */
+/* POPUP (thinner border, no glow) */
 .popup {
     position: fixed;
     top: 50%;
@@ -214,25 +216,27 @@ h1, h2 {
 .popup img {
     width: 100%;
     border-radius: 20px;
-    box-shadow: 0 0 0 6px white, 0 10px 35px rgba(0,0,0,0.6);
+    box-shadow: 0 0 0 3px white, 0 8px 25px rgba(0,0,0,0.5);
 }
 
-/* CARTOON CLOUD PUFF */
-.cloud-puff {
+/* CARTOON MULTI CLOUD */
+.cloud-container {
     position: fixed;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle at 30% 30%, #fff 60%, #e6e6e6 100%);
-    border-radius: 50%;
     pointer-events: none;
-    animation: puff 0.6s ease-out forwards;
     z-index: 1500;
+    animation: puffFade 0.7s ease-out forwards;
 }
 
-@keyframes puff {
-    0% { transform: scale(0.3); opacity: 1; }
+.cloud-bubble {
+    position: absolute;
+    background: radial-gradient(circle at 30% 30%, #ffffff 60%, #e6e6e6 100%);
+    border-radius: 50%;
+}
+
+@keyframes puffFade {
+    0% { transform: scale(0.4); opacity: 1; }
     70% { transform: scale(1.2); opacity: 0.9; }
-    100% { transform: scale(1.6); opacity: 0; }
+    100% { transform: scale(1.5); opacity: 0; }
 }
 </style>
 </head>
@@ -245,7 +249,7 @@ h1, h2 {
 <div class="notification" id="notification">
 <b>Messages</b><br>
 From: Goby 🤍<br>
-"That's my bby peachy hehe! 😘"
+"That's right my bby peachy hehe! Good Choice! 😘"
 </div>
 
 <div class="faceid-overlay" id="faceid">
@@ -299,28 +303,45 @@ noBtn.addEventListener("click",()=>{
 
     noBtn.style.transform=`scale(${noScale})`;
     yesBtn.style.transform=`scale(${yesScale})`;
+    yesBtn.style.zIndex=10;
 
     if(noClicks===5){
 
         const rect = noBtn.getBoundingClientRect();
+        const cloud = document.createElement("div");
+        cloud.classList.add("cloud-container");
+        cloud.style.left = rect.left + rect.width/2 - 70 + "px";
+        cloud.style.top = rect.top + rect.height/2 - 70 + "px";
+        cloud.style.width = "140px";
+        cloud.style.height = "140px";
 
-        const puff = document.createElement("div");
-        puff.classList.add("cloud-puff");
-        puff.style.left = rect.left + rect.width/2 - 60 + "px";
-        puff.style.top = rect.top + rect.height/2 - 60 + "px";
+        const sizes=[80,60,70,50,65];
+        const positions=[
+            {x:30,y:40},{x:70,y:20},
+            {x:90,y:60},{x:20,y:80},{x:60,y:90}
+        ];
 
-        document.body.appendChild(puff);
+        sizes.forEach((size,i)=>{
+            const bubble=document.createElement("div");
+            bubble.classList.add("cloud-bubble");
+            bubble.style.width=size+"px";
+            bubble.style.height=size+"px";
+            bubble.style.left=positions[i].x+"px";
+            bubble.style.top=positions[i].y+"px";
+            cloud.appendChild(bubble);
+        });
+
+        document.body.appendChild(cloud);
 
         noBtn.style.display="none";
-
         document.body.classList.add("shake");
         yesBtn.classList.add("jump");
 
         setTimeout(()=>{
             document.body.classList.remove("shake");
             yesBtn.classList.remove("jump");
-            puff.remove();
-        },600);
+            cloud.remove();
+        },700);
     }
 });
 
@@ -361,5 +382,3 @@ function confettiBurst(){
 
 </body>
 </html>
-
-
