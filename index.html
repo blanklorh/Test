@@ -18,19 +18,19 @@ html, body {
     background-size: cover;
 }
 
-/* TEXT SHADOW */
+/* Text shadow */
 h1, h2 {
     text-shadow: 0 4px 12px rgba(0,0,0,0.75);
 }
 
-/* GIF BOX */
+/* GIF */
 .gif-container {
     position: absolute;
     top: 28%;
     left: 50%;
     transform: translateX(-50%);
     width: 150px;
-    border-radius: 25px;              /* rounded edges */
+    border-radius: 25px;
     overflow: hidden;
     border: 4px solid #ffb6e6;
     box-shadow: 0 8px 25px rgba(0,0,0,0.4);
@@ -44,97 +44,64 @@ h1, h2 {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    width: 90%;
-    z-index: 5;
+    width: 100%;
+    transition: filter 0.6s ease;
 }
 
-h1 {
-    font-size: 26px;
-    color: white;
+.blur {
+    filter: blur(8px);
 }
 
-/* BUTTON AREA */
+/* Buttons */
 .buttons {
     margin-top: 40px;
     display: flex;
     justify-content: center;
-    gap: 40px;
+    gap: 50px;
 }
 
-/* 3D BUTTON STYLE */
 .arcade-btn {
-    min-width: 150px;
-    min-height: 75px;
+    min-width: 170px;
+    min-height: 85px;
     font-size: 22px;
-    border-radius: 20px;
-    font-family: 'Cheri', cursive;
+    border-radius: 22px;
     border: 3px solid;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s ease;
     position: relative;
-    transition: transform 0.2s ease;
-    -webkit-tap-highlight-color: transparent;
-    z-index: 10;
 }
 
-/* 3D effect */
 .arcade-btn::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 20px;
-    box-shadow: 0 8px 0 rgba(0,0,0,0.35);
-    z-index: -1;
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:22px;
+    box-shadow:0 10px 0 rgba(0,0,0,0.35);
+    z-index:-1;
 }
 
-/* Press effect */
 .arcade-btn:active {
-    transform: translateY(4px);
-}
-.arcade-btn:active::after {
-    box-shadow: 0 4px 0 rgba(0,0,0,0.35);
+    transform: translateY(5px) scale(var(--scale,1));
 }
 
-/* YES */
 #yesBtn {
-    background: linear-gradient(145deg, #ff9edb, #ff6fcf);
-    border-color: #ffc4ec;
-    color: white;
+    background: linear-gradient(145deg,#ff9edb,#ff6fcf);
+    border-color:#ffc4ec;
+    color:white;
 }
 
-/* NO */
 #noBtn {
-    background: linear-gradient(145deg, #40e0d0, #1ec7b6);
-    border-color: #b2fff7;
-    color: white;
-}
-
-/* Blur */
-.blur {
-    filter: blur(8px);
-    transition: 0.5s ease;
-}
-
-/* Popup */
-.popup {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.7);
-    width: 85%;
-    opacity: 0;
-    transition: all 0.6s ease;
-    text-align: center;
-}
-
-.popup img {
-    width: 100%;
-    border-radius: 20px;
-    box-shadow: 0 0 40px rgba(255,255,255,0.7);
+    background: linear-gradient(145deg,#40e0d0,#1ec7b6);
+    border-color:#b2fff7;
+    color:white;
 }
 
 /* Notification */
 .notification {
-    position: absolute;
+    position: fixed;
     top: -120px;
     left: 50%;
     transform: translateX(-50%);
@@ -142,26 +109,29 @@ h1 {
     background: rgba(255,255,255,0.95);
     border-radius: 20px;
     padding: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     transition: top 0.5s ease;
+    z-index: 1000;
 }
 
-.notification.show { top: 20px; }
+.notification.show {
+    top: 20px;
+}
 
-/* FACE ID FULL BLACK */
+/* Face ID */
 .faceid-overlay {
     position: fixed;
     inset: 0;
-    background: #000;     /* full black */
+    background: #000;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.4s ease;
-    z-index: 1000;
+    transition: opacity 0.5s ease;
+    z-index: 2000;
 }
 
 .faceid-circle {
@@ -188,21 +158,75 @@ h1 {
 
 .faceid-text {
     margin-top: 20px;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     color: white;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Screen shake */
+@keyframes shake {
+    0%{transform:translate(0,0);}
+    25%{transform:translate(-5px,5px);}
+    50%{transform:translate(5px,-5px);}
+    75%{transform:translate(-5px,5px);}
+    100%{transform:translate(0,0);}
+}
+.shake {
+    animation: shake 0.4s;
+}
+
+/* YES jump */
+@keyframes jump {
+    0%{transform:scale(var(--scale)) translateY(0);}
+    50%{transform:scale(var(--scale)) translateY(-40px);}
+    100%{transform:scale(var(--scale)) translateY(0);}
+}
+.jump {
+    animation: jump 0.6s ease;
+}
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: fall 3s linear forwards;
+}
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Popup */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%) scale(0.7);
+    opacity: 0;
+    transition: all 0.6s ease;
+    width: 85%;
+    text-align: center;
+}
+.popup img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(255,255,255,0.8);
 }
 </style>
 </head>
 
 <body>
 
-<audio id="bgMusic" src="shine-your-light.mp3" loop></audio>
+<audio id="bgMusic" src="shine-your-light.mp3" autoplay loop></audio>
 <audio id="coinSound" src="coin.mp3"></audio>
 
 <div class="notification" id="notification">
 <b>Messages</b><br>
-From: Goby 💖<br>
-"Ofc u would be my valentine hehehehe 😘"
+From: Goby 🤍<br>
+"That's my bby peachy hehe! 😘"
 </div>
 
 <div class="faceid-overlay" id="faceid">
@@ -212,7 +236,7 @@ From: Goby 💖<br>
 <div class="faceid-text" id="faceText">Face ID Scanning...</div>
 </div>
 
-<div class="gif-container" id="gifBox">
+<div class="gif-container">
 <div class="tenor-gif-embed"
 data-postid="1312436877492002001"
 data-share-method="host"
@@ -223,9 +247,9 @@ data-width="100%">
 
 <div class="main-content" id="mainContent">
 <h1>HAI BB, WILL YOU BE MY VALENTINE?</h1>
-<div class="buttons">
-<button type="button" class="arcade-btn" id="yesBtn">YES 💖</button>
-<button type="button" class="arcade-btn" id="noBtn">NO 😜</button>
+<div class="buttons" id="buttonContainer">
+<button class="arcade-btn" id="yesBtn">YES 💖</button>
+<button class="arcade-btn" id="noBtn">NO 😜</button>
 </div>
 </div>
 
@@ -239,41 +263,49 @@ data-width="100%">
 <script>
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-const popup = document.getElementById("popup");
-const mainContent = document.getElementById("mainContent");
-const gifBox = document.getElementById("gifBox");
 const notification = document.getElementById("notification");
 const faceid = document.getElementById("faceid");
 const faceText = document.getElementById("faceText");
+const mainContent = document.getElementById("mainContent");
+const popup = document.getElementById("popup");
 const coinSound = document.getElementById("coinSound");
-const bgMusic = document.getElementById("bgMusic");
 
-document.body.addEventListener("click", () => {
-    bgMusic.play().catch(()=>{});
-}, { once:true });
-
+let noClicks = 0;
 let noScale = 1;
 let yesScale = 1;
 
-/* NO click (fixed & responsive) */
-noBtn.addEventListener("click", function() {
+/* NO click */
+noBtn.addEventListener("click", () => {
 
+    noClicks++;
     noScale *= 0.85;
-    if (noScale < 0.3) noScale = 0.3;
+    if(noScale<0.3) noScale=0.3;
 
-    noBtn.style.transform = `scale(${noScale})`;
+    yesScale *= 1.15;
 
-    yesScale *= 1.1;
-    yesBtn.style.transform = `scale(${yesScale})`;
+    noBtn.style.setProperty('--scale',noScale);
+    yesBtn.style.setProperty('--scale',yesScale);
+
+    noBtn.style.transform=`scale(${noScale})`;
+    yesBtn.style.transform=`scale(${yesScale})`;
+
+    if(noClicks===5){
+        noBtn.style.display="none";
+        document.body.classList.add("shake");
+        yesBtn.classList.add("jump");
+        setTimeout(()=>{
+            document.body.classList.remove("shake");
+            yesBtn.classList.remove("jump");
+        },600);
+    }
 });
 
 /* YES click */
-yesBtn.addEventListener("click", function() {
+yesBtn.addEventListener("click", () => {
 
     coinSound.play();
 
     mainContent.classList.add("blur");
-    gifBox.classList.add("blur");
 
     notification.classList.add("show");
 
@@ -290,13 +322,26 @@ yesBtn.addEventListener("click", function() {
     setTimeout(()=>{
         faceid.style.opacity="0";
         faceid.style.pointerEvents="none";
-        gifBox.style.display="none";
-        mainContent.style.display="none";
         popup.style.opacity="1";
-        popup.style.transform="translate(-50%, -50%) scale(1)";
+        popup.style.transform="translate(-50%,-50%) scale(1)";
+        confettiBurst();
     },5200);
 });
+
+/* Confetti */
+function confettiBurst(){
+    for(let i=0;i<100;i++){
+        const c=document.createElement("div");
+        c.classList.add("confetti");
+        c.style.left=Math.random()*100+"vw";
+        c.style.background=["#ff6fcf","#40e0d0","#fff","#ffd1f7"][Math.floor(Math.random()*4)];
+        c.style.animationDuration=(Math.random()*2+2)+"s";
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),3000);
+    }
+}
 </script>
 
 </body>
 </html>
+
