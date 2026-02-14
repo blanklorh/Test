@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Valentine 💙</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Valentine 💖</title>
+
+<link href="https://fonts.cdnfonts.com/css/cheri" rel="stylesheet">
 
 <style>
 html, body {
@@ -11,124 +13,112 @@ html, body {
     padding: 0;
     height: 100%;
     overflow: hidden;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    background: url('background.jpg') no-repeat center center;
+    font-family: 'Cheri', cursive;
+    background: url('background.png') no-repeat center center;
     background-size: cover;
-    transition: filter 0.6s ease;
 }
 
 /* TEXT */
-h1 {
-    font-size: 26px;
+h1, h2 {
     color: white;
     text-shadow: 0 4px 12px rgba(0,0,0,0.8);
 }
 
-/* GIF */
+/* ROUND GIF (shifted UP 30px total) */
 .gif-container {
     position: absolute;
-    top: 30%;
+    top: 23%;
     left: 50%;
     transform: translateX(-50%);
-    width: 130px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid #ffd6f4;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    background: white;
 }
 
-/* MAIN */
+/* MAIN (shifted UP 15px) */
 .main-content {
     position: absolute;
-    top: 55%;
-    width: 100%;
+    top: 57%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
+    width: 100%;
+    transition: filter 0.6s ease;
 }
 
-/* BUTTONS */
+.blur {
+    filter: blur(8px);
+}
+
+/* BUTTON CONTAINER */
 .buttons {
-    margin-top: 30px;
+    margin-top: 40px;
     display: flex;
     justify-content: center;
-    gap: 25px;
+    gap: 30px;
 }
 
-/* iOS Buttons */
+/* iOS STYLE BUTTONS */
 .ios-btn {
-    min-width: 150px;
-    height: 50px;
-    border-radius: 14px;
-    border: none;
-    font-size: 17px;
+    min-width: 190px;
+    min-height: 60px;
+    padding: 14px 28px;
+    font-size: 20px;
     font-weight: 600;
+    border-radius: 22px;
+    border: none;
     cursor: pointer;
-    transition: transform 0.25s cubic-bezier(.34,1.56,.64,1),
-                box-shadow 0.2s ease;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center;
+    will-change: transform;
 }
 
-.primary {
-    background: #007aff;
+/* YES – pastel pink */
+#yesBtn {
+    background: rgba(255,105,180,0.9);
     color: white;
-    box-shadow: 0 6px 18px rgba(0,122,255,0.35);
+    box-shadow: 0 6px 18px rgba(255,105,180,0.35);
 }
 
-.secondary {
-    background: #f2f2f7;
-    color: #007aff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+/* NO – pastel turquoise */
+#noBtn {
+    background: rgba(64,224,208,0.9);
+    color: white;
+    box-shadow: 0 6px 18px rgba(64,224,208,0.35);
 }
 
 .ios-btn:active {
-    transform: scale(0.94);
+    transform: scale(0.96);
+    opacity: 0.85;
 }
 
-/* Apple spring */
-@keyframes springPop {
-    0% { transform: scale(0.9); }
-    60% { transform: scale(1.08); }
-    80% { transform: scale(0.98); }
-    100% { transform: scale(1); }
-}
-.spring {
-    animation: springPop 0.5s cubic-bezier(.34,1.56,.64,1);
-}
-
-/* iOS 17 Notification */
+/* Notification */
 .notification {
     position: fixed;
-    top: -150px;
+    top: -120px;
     left: 50%;
     transform: translateX(-50%);
-    width: 92%;
-    backdrop-filter: blur(20px);
-    background: rgba(255,255,255,0.75);
-    border-radius: 22px;
-    padding: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    transition: top 0.5s cubic-bezier(.34,1.56,.64,1);
-    z-index: 100;
+    width: 90%;
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    transition: top 0.5s ease;
+    z-index: 1000;
 }
+.notification.show { top: 20px; }
 
-.notification.show {
-    top: 20px;
-}
-
-.notif-header {
-    font-size: 13px;
-    font-weight: 600;
-    color: #666;
-    display: flex;
-    justify-content: space-between;
-}
-
-.notif-title {
-    font-size: 15px;
-    font-weight: 600;
-    margin-top: 4px;
-}
-
-.notif-body {
-    font-size: 14px;
-    margin-top: 2px;
-}
-
-/* Face ID */
+/* FACE ID FULL BLACK */
 .faceid-overlay {
     position: fixed;
     inset: 0;
@@ -138,8 +128,9 @@ h1 {
     justify-content: center;
     align-items: center;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.5s ease;
-    z-index: 200;
+    z-index: 2000;
 }
 
 .faceid-circle {
@@ -148,54 +139,98 @@ h1 {
     border: 4px solid white;
     border-radius: 25px;
     position: relative;
+    overflow: hidden;
 }
 
 .scan-line {
     position: absolute;
     width: 100%;
     height: 4px;
-    background: #007aff;
+    background: #40e0d0;
     animation: scan 2s linear infinite;
 }
 
 @keyframes scan {
-    0% { top: 0; }
-    100% { top: 126px; }
+    from { top: 0; }
+    to { top: 126px; }
 }
 
 .faceid-text {
-    color: white;
     margin-top: 20px;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* iOS Modal Sheet */
+/* SHAKE */
+@keyframes shake {
+    0%{transform:translate(0,0);}
+    25%{transform:translate(-5px,5px);}
+    50%{transform:translate(5px,-5px);}
+    75%{transform:translate(-5px,5px);}
+    100%{transform:translate(0,0);}
+}
+.shake { animation: shake 0.4s; }
+
+/* JUMP */
+@keyframes jump {
+    0%{transform:scale(var(--scale)) translateY(0);}
+    50%{transform:scale(var(--scale)) translateY(-45px);}
+    100%{transform:scale(var(--scale)) translateY(0);}
+}
+.jump { animation: jump 0.6s ease; }
+
+/* CONFETTI */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: fall 3s linear forwards;
+}
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* POPUP – glow removed, thinner border */
 .popup {
     position: fixed;
-    bottom: -100%;
-    left: 0;
-    width: 100%;
-    background: white;
-    border-radius: 28px 28px 0 0;
-    padding: 25px;
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.25);
-    transition: bottom 0.6s cubic-bezier(.34,1.56,.64,1);
-    z-index: 300;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%) scale(0.7);
+    opacity: 0;
+    transition: all 0.6s ease;
+    width: 85%;
     text-align: center;
 }
 
-.popup.show {
-    bottom: 0;
-}
-
 .popup img {
-    width: 90%;
+    width: 100%;
     border-radius: 18px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    border: 2px solid rgba(255,255,255,0.9);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.35);
 }
 
-.popup h2 {
-    margin-top: 15px;
-    font-size: 18px;
+/* MULTI CLOUD PUFF */
+.cloud-container {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1500;
+    animation: puffFade 0.7s ease-out forwards;
+}
+
+.cloud-bubble {
+    position: absolute;
+    background: radial-gradient(circle at 30% 30%, #ffffff 60%, #e6e6e6 100%);
+    border-radius: 50%;
+}
+
+@keyframes puffFade {
+    0% { transform: scale(0.4); opacity: 1; }
+    70% { transform: scale(1.2); opacity: 0.9; }
+    100% { transform: scale(1.5); opacity: 0; }
 }
 </style>
 </head>
@@ -205,94 +240,137 @@ h1 {
 <audio id="bgMusic" src="shine-your-light.mp3" autoplay loop></audio>
 <audio id="coinSound" src="coin.mp3"></audio>
 
-<!-- iOS 17 Notification -->
 <div class="notification" id="notification">
-    <div class="notif-header">
-        <span>Messages</span>
-        <span id="timeNow"></span>
-    </div>
-    <div class="notif-title">Goby 🤍</div>
-    <div class="notif-body">That's my bby peachy! Good Choice! You do LAV ME! 😘</div>
+<b>Messages</b><br>
+From: Goby 🤍<br>
+"That's my bby peachy! You do LAV ME! 😘😘"
 </div>
 
-<!-- Face ID -->
 <div class="faceid-overlay" id="faceid">
-    <div class="faceid-circle">
-        <div class="scan-line"></div>
-    </div>
-    <div class="faceid-text" id="faceText">Face ID Scanning...</div>
+<div class="faceid-circle">
+<div class="scan-line"></div>
+</div>
+<div class="faceid-text" id="faceText">Face ID Scanning...</div>
 </div>
 
-<!-- GIF -->
 <div class="gif-container">
-    <div class="tenor-gif-embed"
-         data-postid="1312436877492002001"
-         data-share-method="host"
-         data-width="100%">
-    </div>
+<div class="tenor-gif-embed"
+data-postid="1312436877492002001"
+data-share-method="host"
+data-aspect-ratio="1"
+data-width="100%">
+</div>
 </div>
 
-<!-- MAIN -->
-<div class="main-content">
-    <h1>HAI BB, WILL YOU BE MY VALENTINE?</h1>
-    <div class="buttons">
-        <button class="ios-btn primary" id="yesBtn">Yes 💙</button>
-        <button class="ios-btn secondary" id="noBtn">Cancel</button>
-    </div>
+<div class="main-content" id="mainContent">
+<h1>HAI BB, WILL YOU BE MY VALENTINE?</h1>
+<div class="buttons">
+<button class="ios-btn" id="yesBtn">YES 💖</button>
+<button class="ios-btn" id="noBtn">NO 😜</button>
+</div>
 </div>
 
-<!-- MODAL -->
 <div class="popup" id="popup">
-    <img src="image2.jpg">
-    <h2>I knew you would hehehehe! I LOVE U BEB! 💙</h2>
+<img src="image2.jpg">
+<h2>I knew you would hehehehe! I LOVE U BEB! 💖</h2>
 </div>
 
 <script async src="https://tenor.com/embed.js"></script>
 
 <script>
 const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
 const notification = document.getElementById("notification");
-const popup = document.getElementById("popup");
 const faceid = document.getElementById("faceid");
 const faceText = document.getElementById("faceText");
+const mainContent = document.getElementById("mainContent");
+const popup = document.getElementById("popup");
 const coinSound = document.getElementById("coinSound");
-const timeNow = document.getElementById("timeNow");
 
-/* Dynamic Time */
-timeNow.innerText = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+let noClicks=0, noScale=1, yesScale=1;
 
-/* Haptic Simulation */
-function haptic(pattern=[10]) {
-    if (navigator.vibrate) navigator.vibrate(pattern);
-}
+noBtn.addEventListener("click",()=>{
+    noClicks++;
+    noScale*=0.85;
+    if(noScale<0.3) noScale=0.3;
+    yesScale*=1.15;
 
-/* YES CLICK */
-yesBtn.addEventListener("click", () => {
+    noBtn.style.transform=`scale(${noScale})`;
+    yesBtn.style.transform=`scale(${yesScale})`;
+    yesBtn.style.zIndex=10;
 
-    haptic([15, 30, 15]);
-    yesBtn.classList.add("spring");
-    setTimeout(()=>yesBtn.classList.remove("spring"),500);
+    if(noClicks===5){
+        const rect = noBtn.getBoundingClientRect();
+        const cloud = document.createElement("div");
+        cloud.classList.add("cloud-container");
+        cloud.style.left = rect.left + rect.width/2 - 70 + "px";
+        cloud.style.top = rect.top + rect.height/2 - 70 + "px";
+        cloud.style.width = "140px";
+        cloud.style.height = "140px";
 
+        const sizes=[80,60,70,50,65];
+        const positions=[
+            {x:30,y:40},{x:70,y:20},
+            {x:90,y:60},{x:20,y:80},{x:60,y:90}
+        ];
+
+        sizes.forEach((size,i)=>{
+            const bubble=document.createElement("div");
+            bubble.classList.add("cloud-bubble");
+            bubble.style.width=size+"px";
+            bubble.style.height=size+"px";
+            bubble.style.left=positions[i].x+"px";
+            bubble.style.top=positions[i].y+"px";
+            cloud.appendChild(bubble);
+        });
+
+        document.body.appendChild(cloud);
+
+        noBtn.style.display="none";
+        document.body.classList.add("shake");
+        yesBtn.classList.add("jump");
+
+        setTimeout(()=>{
+            document.body.classList.remove("shake");
+            yesBtn.classList.remove("jump");
+            cloud.remove();
+        },700);
+    }
+});
+
+yesBtn.addEventListener("click",()=>{
     coinSound.play();
-    document.body.style.filter = "blur(6px)";
+    mainContent.classList.add("blur");
     notification.classList.add("show");
 
-    setTimeout(() => {
+    setTimeout(()=>{
         notification.classList.remove("show");
-        faceid.style.opacity = "1";
-    }, 2000);
+        faceid.style.opacity="1";
+        faceid.style.pointerEvents="auto";
+    },2000);
 
-    setTimeout(() => {
-        faceText.innerText = "Face ID Recognized ✓";
-        haptic([30]);
-    }, 4000);
+    setTimeout(()=>{ faceText.innerText="Face ID Recognized ✓"; },4000);
 
-    setTimeout(() => {
-        faceid.style.opacity = "0";
-        document.body.style.filter = "blur(0)";
-        popup.classList.add("show");
-    }, 5200);
+    setTimeout(()=>{
+        faceid.style.opacity="0";
+        faceid.style.pointerEvents="none";
+        popup.style.opacity="1";
+        popup.style.transform="translate(-50%,-50%) scale(1)";
+        confettiBurst();
+    },5200);
 });
+
+function confettiBurst(){
+    for(let i=0;i<100;i++){
+        const c=document.createElement("div");
+        c.classList.add("confetti");
+        c.style.left=Math.random()*100+"vw";
+        c.style.background=["#ff6fcf","#40e0d0","#fff","#ffd1f7"][Math.floor(Math.random()*4)];
+        c.style.animationDuration=(Math.random()*2+2)+"s";
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),3000);
+    }
+}
 </script>
 
 </body>
