@@ -18,6 +18,11 @@ html, body {
     background-size: cover;
 }
 
+/* TEXT SHADOW FOR ALL TEXT */
+h1, h2 {
+    text-shadow: 0 4px 12px rgba(0,0,0,0.7);
+}
+
 /* GIF */
 .gif-container {
     position: absolute;
@@ -25,10 +30,9 @@ html, body {
     left: 50%;
     transform: translateX(-50%);
     width: 140px;
-    z-index: 1;
 }
 
-/* Main content */
+/* MAIN */
 .main-content {
     position: absolute;
     top: 60%;
@@ -36,45 +40,59 @@ html, body {
     transform: translate(-50%, -50%);
     text-align: center;
     width: 90%;
-    z-index: 5;
 }
 
 h1 {
     font-size: 26px;
     color: white;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.6);
 }
 
+/* ARCADE BUTTONS */
 .buttons {
     margin-top: 35px;
-    display: flex;
-    justify-content: center;
-    gap: 40px;
+    position: relative;
+    height: 120px;
 }
 
-.buttons img {
-    width: 180px;   /* Bigger buttons */
+.arcade-btn {
+    position: absolute;
+    padding: 18px 30px;
+    font-size: 22px;
+    border-radius: 18px;
+    border: none;
     cursor: pointer;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    transition: transform 0.2s ease;
+    font-family: 'Cheri', cursive;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 0 rgba(0,0,0,0.3);
+    text-shadow: 0 3px 6px rgba(0,0,0,0.6);
 }
 
-/* YES glow */
+/* YES */
 #yesBtn {
+    left: 15%;
+    background: linear-gradient(145deg, #ff9edb, #ff6fcf);
+    color: white;
     animation: glow 2s infinite;
 }
 
-@keyframes glow {
-    0% { filter: drop-shadow(0 0 8px #fff); }
-    50% { filter: drop-shadow(0 0 35px #ff9edb); }
-    100% { filter: drop-shadow(0 0 8px #fff); }
+/* NO */
+#noBtn {
+    right: 15%;
+    background: linear-gradient(145deg, #40e0d0, #1ec7b6);
+    color: white;
 }
 
-/* Blur effect */
+/* Glow animation */
+@keyframes glow {
+    0% { box-shadow: 0 0 10px #fff; }
+    50% { box-shadow: 0 0 35px #ff9edb; }
+    100% { box-shadow: 0 0 10px #fff; }
+}
+
+/* Blur */
 .blur {
     filter: blur(8px);
-    transition: filter 0.5s ease;
+    transition: 0.5s ease;
 }
 
 /* Popup */
@@ -87,7 +105,6 @@ h1 {
     opacity: 0;
     transition: all 0.6s ease;
     text-align: center;
-    z-index: 20;
 }
 
 .popup img {
@@ -98,7 +115,6 @@ h1 {
 
 .popup h2 {
     color: white;
-    margin-top: 15px;
 }
 
 /* Notification */
@@ -114,7 +130,7 @@ h1 {
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     transition: top 0.5s ease;
-    z-index: 30;
+    z-index: 10;
 }
 
 .notification.show { top: 20px; }
@@ -131,7 +147,6 @@ h1 {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s ease;
-    z-index: 40;
 }
 
 .faceid-circle {
@@ -171,8 +186,8 @@ h1 {
 
 <div class="notification" id="notification">
 <b>Messages</b><br>
-From: Your Future Valentine 💖<br>
-"You made the right choice 😘"
+From: Goby 💖<br>
+"Solid la good choice hehe 😘"
 </div>
 
 <div class="faceid-overlay" id="faceid">
@@ -194,8 +209,8 @@ data-width="100%">
 <div class="main-content" id="mainContent">
 <h1>HAI BB, WILL YOU BE MY VALENTINE?</h1>
 <div class="buttons">
-<img src="Yes.png" id="yesBtn">
-<img src="No.png" id="noBtn">
+<button class="arcade-btn" id="yesBtn">YES 💖</button>
+<button class="arcade-btn" id="noBtn">NO 😜</button>
 </div>
 </div>
 
@@ -209,21 +224,42 @@ data-width="100%">
 <script>
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-const notification = document.getElementById("notification");
 const popup = document.getElementById("popup");
 const mainContent = document.getElementById("mainContent");
 const gifBox = document.getElementById("gifBox");
-const coinSound = document.getElementById("coinSound");
+const notification = document.getElementById("notification");
 const faceid = document.getElementById("faceid");
 const faceText = document.getElementById("faceText");
+const coinSound = document.getElementById("coinSound");
 const bgMusic = document.getElementById("bgMusic");
 
-/* iPhone-safe autoplay */
 document.body.addEventListener("click", () => {
     bgMusic.play().catch(()=>{});
 }, { once:true });
 
-/* YES click */
+let noScale = 1;
+let yesScale = 1;
+
+/* NO behavior */
+noBtn.addEventListener("click", () => {
+
+    // Shrink NO
+    noScale *= 0.85;
+    if (noScale < 0.3) noScale = 0.3;
+    noBtn.style.transform = `scale(${noScale})`;
+
+    // Grow YES
+    yesScale *= 1.1;
+    yesBtn.style.transform = `scale(${yesScale})`;
+
+    // Move NO randomly
+    const randomX = Math.random() * 200 - 100;
+    const randomY = Math.random() * 80 - 40;
+    noBtn.style.left = `calc(50% + ${randomX}px)`;
+    noBtn.style.top = `${randomY + 40}px`;
+});
+
+/* YES behavior */
 yesBtn.addEventListener("click", () => {
 
     coinSound.play();
@@ -251,20 +287,6 @@ yesBtn.addEventListener("click", () => {
         popup.style.opacity="1";
         popup.style.transform="translate(-50%, -50%) scale(1)";
     },5200);
-});
-
-/* NO shrink every click */
-let noScale = 1;
-
-noBtn.addEventListener("click", () => {
-
-    noScale *= 0.85;  // shrink 15% each click
-
-    if (noScale < 0.25) {
-        noScale = 0.25;  // minimum size
-    }
-
-    noBtn.style.transform = `scale(${noScale})`;
 });
 </script>
 
