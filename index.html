@@ -15,8 +15,7 @@ html, body {
     overflow: hidden;
     font-family: 'Cheri', cursive;
     background: url('background.png') no-repeat center center;
-    background-size: cover;       /* prevents distortion */
-    background-attachment: fixed;
+    background-size: cover;
 }
 
 /* GIF */
@@ -54,13 +53,14 @@ h1 {
 }
 
 .buttons img {
-    width: 170px;          /* BIGGER */
+    width: 180px;   /* Bigger buttons */
     cursor: pointer;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s ease;
 }
 
-/* Glow YES */
+/* YES glow */
 #yesBtn {
     animation: glow 2s infinite;
 }
@@ -253,12 +253,18 @@ yesBtn.addEventListener("click", () => {
     },5200);
 });
 
-/* NO click (working now) */
+/* NO shrink every click */
+let noScale = 1;
+
 noBtn.addEventListener("click", () => {
-    noBtn.style.transform = "scale(0.8)";
-    setTimeout(() => {
-        noBtn.style.transform = "scale(1)";
-    }, 200);
+
+    noScale *= 0.85;  // shrink 15% each click
+
+    if (noScale < 0.25) {
+        noScale = 0.25;  // minimum size
+    }
+
+    noBtn.style.transform = `scale(${noScale})`;
 });
 </script>
 
