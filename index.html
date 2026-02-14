@@ -23,15 +23,14 @@ h1, h2 {
     text-shadow: 0 4px 12px rgba(0,0,0,0.75);
 }
 
-/* GIF */
+/* GIF BOX */
 .gif-container {
     position: absolute;
     top: 28%;
     left: 50%;
     transform: translateX(-50%);
     width: 150px;
-    height: 150px;
-    border-radius: 50%;
+    border-radius: 25px;              /* rounded edges */
     overflow: hidden;
     border: 4px solid #ffb6e6;
     box-shadow: 0 8px 25px rgba(0,0,0,0.4);
@@ -46,6 +45,7 @@ h1, h2 {
     transform: translate(-50%, -50%);
     text-align: center;
     width: 90%;
+    z-index: 5;
 }
 
 h1 {
@@ -53,32 +53,45 @@ h1 {
     color: white;
 }
 
-/* BUTTON CONTAINER */
+/* BUTTON AREA */
 .buttons {
-    margin-top: 35px;
+    margin-top: 40px;
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 40px;
 }
 
-/* ARCADE BUTTON */
+/* 3D BUTTON STYLE */
 .arcade-btn {
-    min-width: 140px;        /* bigger tap area */
-    min-height: 70px;
-    padding: 20px 35px;
+    min-width: 150px;
+    min-height: 75px;
     font-size: 22px;
     border-radius: 20px;
-    cursor: pointer;
     font-family: 'Cheri', cursive;
     border: 3px solid;
-    box-shadow: 0 8px 0 rgba(0,0,0,0.3);
-    text-shadow: 0 3px 6px rgba(0,0,0,0.6);
-    transition: transform 0.25s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s ease;
     -webkit-tap-highlight-color: transparent;
+    z-index: 10;
+}
+
+/* 3D effect */
+.arcade-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    box-shadow: 0 8px 0 rgba(0,0,0,0.35);
+    z-index: -1;
+}
+
+/* Press effect */
+.arcade-btn:active {
+    transform: translateY(4px);
+}
+.arcade-btn:active::after {
+    box-shadow: 0 4px 0 rgba(0,0,0,0.35);
 }
 
 /* YES */
@@ -119,10 +132,6 @@ h1 {
     box-shadow: 0 0 40px rgba(255,255,255,0.7);
 }
 
-.popup h2 {
-    color: white;
-}
-
 /* Notification */
 .notification {
     position: absolute;
@@ -140,13 +149,11 @@ h1 {
 
 .notification.show { top: 20px; }
 
-/* Face ID */
+/* FACE ID FULL BLACK */
 .faceid-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: #000;     /* full black */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -154,8 +161,9 @@ h1 {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s ease;
-    z-index: 999;
+    z-index: 1000;
 }
+
 .faceid-circle {
     width: 130px;
     height: 130px;
@@ -193,8 +201,8 @@ h1 {
 
 <div class="notification" id="notification">
 <b>Messages</b><br>
-From: Goby 🤍<br>
-"Solid choice lah bebbb!! 😘"
+From: Goby 💖<br>
+"Ofc u would be my valentine hehehehe 😘"
 </div>
 
 <div class="faceid-overlay" id="faceid">
@@ -216,8 +224,8 @@ data-width="100%">
 <div class="main-content" id="mainContent">
 <h1>HAI BB, WILL YOU BE MY VALENTINE?</h1>
 <div class="buttons">
-<button class="arcade-btn" id="yesBtn">YES 💖</button>
-<button class="arcade-btn" id="noBtn">NO 😜</button>
+<button type="button" class="arcade-btn" id="yesBtn">YES 💖</button>
+<button type="button" class="arcade-btn" id="noBtn">NO 😜</button>
 </div>
 </div>
 
@@ -247,21 +255,20 @@ document.body.addEventListener("click", () => {
 let noScale = 1;
 let yesScale = 1;
 
-/* NO behavior */
-noBtn.addEventListener("click", () => {
+/* NO click (fixed & responsive) */
+noBtn.addEventListener("click", function() {
 
-    // shrink NO (uniform scale, no distortion)
     noScale *= 0.85;
     if (noScale < 0.3) noScale = 0.3;
+
     noBtn.style.transform = `scale(${noScale})`;
 
-    // grow YES every time
     yesScale *= 1.1;
     yesBtn.style.transform = `scale(${yesScale})`;
 });
 
-/* YES behavior */
-yesBtn.addEventListener("click", () => {
+/* YES click */
+yesBtn.addEventListener("click", function() {
 
     coinSound.play();
 
